@@ -1,5 +1,6 @@
 package won.bot.skeleton.impl;
 
+import org.apache.jena.vocabulary.DC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import won.bot.framework.bot.base.EventBot;
@@ -27,9 +28,13 @@ import won.bot.skeleton.context.SkeletonBotContextWrapper;
 import won.bot.framework.extensions.matcher.MatcherBehaviour;
 import won.bot.framework.extensions.matcher.MatcherExtension;
 import won.bot.framework.extensions.matcher.MatcherExtensionAtomCreatedEvent;
+import won.protocol.model.Coordinate;
+import won.protocol.util.DefaultAtomModelWrapper;
+import won.protocol.vocabulary.SCHEMA;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
+import java.util.Random;
 
 public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAtomExtension {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -91,10 +96,14 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
 
                 ConnectFromOtherAtomEvent connectFromOtherAtomEvent = (ConnectFromOtherAtomEvent) event;
                 try {
-                    String message = "Hello i am the BookPileBot i will send you a message everytime an atom is created...";
+                    String message = "hello\n" +
+                            "i am the BookPileBot and i will find books for that you send me or that somebody searches for\n" +
+                            "please send me a book title or an isbn number\n" +
+                            "thank you";
+
                     final ConnectCommandEvent connectCommandEvent = new ConnectCommandEvent(connectFromOtherAtomEvent.getRecipientSocket(), connectFromOtherAtomEvent.getSenderSocket(), message);
                     ctx.getEventBus().subscribe(ConnectCommandSuccessEvent.class, new ActionOnFirstEventListener(ctx,
-                                                                                                          new CommandResultFilter(connectCommandEvent), new BaseEventBotAction(ctx) {
+                            new CommandResultFilter(connectCommandEvent), new BaseEventBotAction(ctx) {
                         @Override
                         protected void doRun(Event event, EventListener executingListener) {
                             ConnectCommandResultEvent connectionMessageCommandResultEvent = (ConnectCommandResultEvent) event;
@@ -134,3 +143,18 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
         });
     }
 }
+
+
+
+/*
+java.lang.ClassCastException: class won.bot.framework.eventbot.event.impl.wonmessage.ConnectFromOtherAtomEvent cannot be cast to class won.bot.framework.extensions.matcher.MatcherExtensionAtomCreatedEvent (won.bot.framework.eventbot.event.impl.wonmessage.ConnectFromOtherAtomEvent and won.bot.framework.extensions.matcher.MatcherExtensionAtomCreatedEvent are in unnamed module of loader 'app')
+	at won.bot.skeleton.impl.SkeletonBot$1.doRun(SkeletonBot.java:101) ~[classes/:na]
+	at won.bot.framework.eventbot.action.BaseEventBotAction.lambda$getActionTask$0(BaseEventBotAction.java:49) ~[won-bot-0.7.jar:na]
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) ~[spring-context-4.3.18.RELEASE.jar:4.3.18.RELEASE]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515) ~[na:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+ */
