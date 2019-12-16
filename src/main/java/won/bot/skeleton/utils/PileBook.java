@@ -1,4 +1,4 @@
-package won.bot.skeleton.impl;
+package won.bot.skeleton.utils;
 
 /**
  * Created by Samantha on 10.12.2019.
@@ -10,8 +10,9 @@ public class PileBook {
     private String series;
     private String publisher;
     private String mediaType;
-    private String href;
+    private String url;
     private String year;
+    private String isbn;
 
     private String search;
 
@@ -24,7 +25,7 @@ public class PileBook {
     }
 
     public void setTitle(String title) {
-        this.title = title.trim();
+        this.title = title.trim().replaceAll("<.?mark>", "");
     }
 
     public String getSubtitle() {
@@ -75,12 +76,12 @@ public class PileBook {
         this.search = search.trim();
     }
 
-    public String getHref() {
-        return href;
+    public String getUrl() {
+        return url;
     }
 
-    public void setHref(String href) {
-        this.href = href.trim();
+    public void setUrl(String url) {
+        this.url = url.trim().replace("&amp;", "&");
     }
 
     public String getYear() {
@@ -91,14 +92,43 @@ public class PileBook {
         this.year = year.trim();
     }
 
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getDescription() {
+        if (subtitle != null && !subtitle.equals("")) {
+            String desc = subtitle;
+
+            if (year != null) {
+                return desc + ", " + year;
+            }
+
+            return desc;
+        }
+        if (year != null) {
+            return ""+year;
+        }
+        return "";
+    }
+
     @Override
     public String toString() {
         return "PileBook{" +
                 "title='" + title + '\'' +
+                ", subtitle='" + subtitle + '\'' +
                 ", author='" + author + '\'' +
                 ", series='" + series + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", mediaType='" + mediaType + '\'' +
+                ", url='" + url + '\'' +
+                ", year='" + year + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", search='" + search + '\'' +
                 '}';
     }
 }

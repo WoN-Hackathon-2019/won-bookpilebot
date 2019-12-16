@@ -71,6 +71,25 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
         atomNode.addLiteral(SCHEMA.NAME, name);
     }
 
+    public void setIsbn(String isbn) {
+        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
+        atomNode.addProperty(_SCHEMA.ISBN, isbn);
+    }
+
+    public void setUrl(String url) {
+        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
+        atomNode.addProperty(SCHEMA.URL, url);
+    }
+
+    public void setAuthorName(String name) {
+        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
+        Resource author = atomNode.getModel().createResource();
+
+        atomNode.addProperty(SCHEMA.AUTHOR, author);
+        author.addProperty(SCHEMA.NAME, name);
+        author.addProperty(RDF.type, SCHEMA.PERSON);
+    }
+
     public void setSeeksTitle(String title) {
         this.createSeeksNodeIfNonExist();
         this.setSeeksPropertyStringValue(DC.title, title);

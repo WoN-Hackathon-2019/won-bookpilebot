@@ -1,4 +1,4 @@
-package won.bot.skeleton.impl;
+package won.bot.skeleton.utils;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
