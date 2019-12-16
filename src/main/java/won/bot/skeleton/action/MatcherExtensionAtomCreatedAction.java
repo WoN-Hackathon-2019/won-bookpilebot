@@ -42,8 +42,6 @@ public class MatcherExtensionAtomCreatedAction extends BaseEventBotAction {
         SkeletonBotContextWrapper botContextWrapper = (SkeletonBotContextWrapper) ctx.getBotContextWrapper();
         MatcherExtensionAtomCreatedEvent atomCreatedEvent = (MatcherExtensionAtomCreatedEvent) event;
 
-        //Dataset
-        //me
         System.out.println("start");
         BookAtomModelWrapper bookAtomModelWrapper = new BookAtomModelWrapper(atomCreatedEvent.getAtomData());
 
@@ -90,37 +88,5 @@ public class MatcherExtensionAtomCreatedAction extends BaseEventBotAction {
             }
         }
         System.out.println("done");
-
-        //nur die looking for, wie?
-
-
-        /*System.out.println("forEach");
-        defaultAtomModelWrapper.getSeeksNodes().forEach(node -> {
-            System.out.println(defaultAtomModelWrapper.getContentPropertyStringValue(node, DC.description));
-        });*/
-
-        //me
-
-       // Map<URI, Set<URI>> connectedSocketsMapSet = botContextWrapper.getConnectedSockets();
-
-        //hier iwo also mittels tag schauen (book, buch) ob es passt, wenn ja ->
-        // crawlen & atom erstellen
-
-        /*for(Map.Entry<URI, Set<URI>> entry : connectedSocketsMapSet.entrySet()) {
-            URI senderSocket = entry.getKey();
-            Set<URI> targetSocketsSet = entry.getValue();
-            for(URI targetSocket : targetSocketsSet) {
-                logger.info("TODO: Send MSG("+senderSocket+"->"+targetSocket+") that we registered that an Atom was created, atomUri is: " +atomCreatedEvent.getAtomURI());
-                WonMessage wonMessage = WonMessageBuilder
-                                            .connectionMessage()
-                                            .sockets()
-                                            .sender(senderSocket)
-                                            .recipient(targetSocket)
-                                            .content()
-                                            .text("We registered that an Atom was created, atomUri is: " + atomCreatedEvent.getAtomURI())
-                                            .build();
-                ctx.getWonMessageSender().prepareAndSendMessage(wonMessage);
-            }
-        }*/
     }
 }
