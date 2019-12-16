@@ -1,5 +1,6 @@
 package won.bot.skeleton.impl;
 
+import org.apache.jena.vocabulary.DC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import won.bot.framework.bot.base.EventBot;
@@ -13,6 +14,7 @@ import won.bot.framework.eventbot.event.impl.command.connect.ConnectCommandResul
 import won.bot.framework.eventbot.event.impl.command.connect.ConnectCommandSuccessEvent;
 import won.bot.framework.eventbot.event.impl.wonmessage.CloseFromOtherAtomEvent;
 import won.bot.framework.eventbot.event.impl.wonmessage.ConnectFromOtherAtomEvent;
+import won.bot.framework.eventbot.event.impl.wonmessage.MessageFromOtherAtomEvent;
 import won.bot.framework.eventbot.filter.impl.AtomUriInNamedListFilter;
 import won.bot.framework.eventbot.filter.impl.CommandResultFilter;
 import won.bot.framework.eventbot.filter.impl.NotFilter;
@@ -27,9 +29,16 @@ import won.bot.skeleton.context.SkeletonBotContextWrapper;
 import won.bot.framework.extensions.matcher.MatcherBehaviour;
 import won.bot.framework.extensions.matcher.MatcherExtension;
 import won.bot.framework.extensions.matcher.MatcherExtensionAtomCreatedEvent;
+import won.protocol.message.WonMessage;
+import won.protocol.message.builder.WonMessageBuilder;
+import won.protocol.model.Coordinate;
+import won.protocol.util.DefaultAtomModelWrapper;
+import won.protocol.vocabulary.SCHEMA;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
+import java.util.Map;
+import java.util.Set;
 
 public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAtomExtension {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -91,10 +100,14 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
 
                 ConnectFromOtherAtomEvent connectFromOtherAtomEvent = (ConnectFromOtherAtomEvent) event;
                 try {
-                    String message = "Hello i am the BookPileBot i will send you a message everytime an atom is created...";
+                    String message = "hello\n" +
+                            "i am the BookPileBot and i will find books for that you send me or that somebody searches for\n" +
+                            "please send me a book title or an isbn number\n" +
+                            "thank you";
+
                     final ConnectCommandEvent connectCommandEvent = new ConnectCommandEvent(connectFromOtherAtomEvent.getRecipientSocket(), connectFromOtherAtomEvent.getSenderSocket(), message);
                     ctx.getEventBus().subscribe(ConnectCommandSuccessEvent.class, new ActionOnFirstEventListener(ctx,
-                                                                                                          new CommandResultFilter(connectCommandEvent), new BaseEventBotAction(ctx) {
+                            new CommandResultFilter(connectCommandEvent), new BaseEventBotAction(ctx) {
                         @Override
                         protected void doRun(Event event, EventListener executingListener) {
                             ConnectCommandResultEvent connectionMessageCommandResultEvent = (ConnectCommandResultEvent) event;
@@ -113,6 +126,39 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
                     ctx.getEventBus().publish(connectCommandEvent);
                 } catch (Exception te) {
                     logger.error(te.getMessage(), te);
+                }
+            }
+        });
+
+
+        // listen for the MessageFromOtherAtomEvent
+        bus.subscribe(MessageFromOtherAtomEvent.class, new BaseEventBotAction(ctx) {
+            protected void doRun(Event event, EventListener executingListener) {
+                //EventListenerContext ctx = getEventListenerContext();
+
+                //MessageFromOtherAtomEvent messageFromOtherAtomEvent = (MessageFromOtherAtomEvent) event;
+
+                //TODO lesen was geschrieben wurde und damit den crawler aufrufen
+
+                //TODO nur einer person antworten (der richtigen)
+
+                Map<URI, Set<URI>> connectedSocketsMapSet = botContextWrapper.getConnectedSockets();
+
+                for(Map.Entry<URI, Set<URI>> entry : connectedSocketsMapSet.entrySet()) {
+                    URI senderSocket = entry.getKey();
+                    Set<URI> targetSocketsSet = entry.getValue();
+                    for(URI targetSocket : targetSocketsSet) {
+                        logger.info("TODO: Send MSG("+senderSocket+"->"+targetSocket+") that we did the search for them ");
+                        WonMessage wonMessage = WonMessageBuilder
+                                .connectionMessage()
+                                .sockets()
+                                .sender(senderSocket)
+                                .recipient(targetSocket)
+                                .content()
+                                .text("I have searched and found")
+                                .build();
+                        ctx.getWonMessageSender().prepareAndSendMessage(wonMessage);
+                    }
                 }
             }
         });
