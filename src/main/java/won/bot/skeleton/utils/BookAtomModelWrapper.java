@@ -347,6 +347,30 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
         return this.getSomeContentPropertyStringValue(_SCHEMA.ISBN, preferredLanguages);
     }
 
+    public String getSeeksIsbn() {
+        for (Resource r : this.getSeeksNodes()) {
+            String c = this.getIsbn(r, _SCHEMA.ISBN);
+            if (c != null) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public String getIsbn() {
+        return this.getIsbn(this.getAtomContentNode(), _SCHEMA.ISBN);
+    }
+
+    private String getIsbn(Resource contentNode, Property isbnProperty) {
+        Model atomModel = this.getAtomModel();
+        RDFNode isbnNode = RdfUtils.findOnePropertyFromResource(atomModel, contentNode, isbnProperty);
+        if (isbnNode != null) {
+            return isbnNode.asLiteral().getString();
+        } else {
+            return null;
+        }
+    }
+
     public Float getAnyPrice() {
         if (this.isSeek()) {
             return this.getSeeksPrice();

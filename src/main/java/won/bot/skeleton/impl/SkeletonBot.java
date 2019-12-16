@@ -143,18 +143,3 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
         });
     }
 }
-
-
-
-/*
-java.lang.ClassCastException: class won.bot.framework.eventbot.event.impl.wonmessage.ConnectFromOtherAtomEvent cannot be cast to class won.bot.framework.extensions.matcher.MatcherExtensionAtomCreatedEvent (won.bot.framework.eventbot.event.impl.wonmessage.ConnectFromOtherAtomEvent and won.bot.framework.extensions.matcher.MatcherExtensionAtomCreatedEvent are in unnamed module of loader 'app')
-	at won.bot.skeleton.impl.SkeletonBot$1.doRun(SkeletonBot.java:101) ~[classes/:na]
-	at won.bot.framework.eventbot.action.BaseEventBotAction.lambda$getActionTask$0(BaseEventBotAction.java:49) ~[won-bot-0.7.jar:na]
-	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) ~[spring-context-4.3.18.RELEASE.jar:4.3.18.RELEASE]
-	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515) ~[na:na]
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
-	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304) ~[na:na]
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[na:na]
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[na:na]
-	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
- */
