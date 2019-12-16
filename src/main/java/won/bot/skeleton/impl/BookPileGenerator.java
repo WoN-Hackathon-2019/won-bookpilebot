@@ -1,6 +1,5 @@
 package won.bot.skeleton.impl;
 
-import org.apache.jena.rdf.model.Resource;
 import won.bot.framework.eventbot.EventListenerContext;
 import won.bot.framework.eventbot.action.BaseEventBotAction;
 import won.bot.framework.eventbot.event.Event;
@@ -45,8 +44,7 @@ public class BookPileGenerator {
     private static final String regex_isbn = "<div>\\s*?<span.*?>\\s*?ISBN:\\s*?</span>\\s*?<span.*?>(.*?)</span>\\s*?</div>";
 
     public ArrayList<AtomModelWrapper> generatePile(String keyword) {
-        WonNodeInformationService wonNodeInformationService =
-                ctx.getWonNodeInformationService();
+        WonNodeInformationService wonNodeInformationService = ctx.getWonNodeInformationService();
         URI wonNodeUri = ctx.getNodeURISource().getNodeURI();
 
         ArrayList<AtomModelWrapper> bookAtoms = new ArrayList<>();
@@ -55,10 +53,11 @@ public class BookPileGenerator {
             URI atomURI = wonNodeInformationService.generateAtomURI(wonNodeUri);
             BookAtomModelWrapper atomModelWrapper = new BookAtomModelWrapper(atomURI);
             atomModelWrapper.setTitle(book.getTitle());
-            Resource res = atomModelWrapper.getAtomContentNode();
             if (book.getIsbn() != null) {
                 atomModelWrapper.setIsbn(book.getIsbn());
             }
+            // TODO check empty fields
+            // TODO check set URL
             atomModelWrapper.setUrl(book.getUrl());
             atomModelWrapper.setDescription(book.getDescription());
             atomModelWrapper.setAuthorName(book.getAuthor());
@@ -85,9 +84,8 @@ public class BookPileGenerator {
                                     System.out.println("Book created");
                                 }
                             }));
-            System.out.println("Try creating Atom");
+
             ctx.getEventBus().publish(createCommand);
-            System.out.println("Atom published");
 
             // prepare the creation message that will be sent to the node
             /*
@@ -133,11 +131,8 @@ public class BookPileGenerator {
             String bookHtml = restClient.get(book.getUrl());
             Pattern pattern2 = Pattern.compile(regex_isbn, Pattern.DOTALL);
             Matcher matcher2 = pattern2.matcher(bookHtml);
-            System.out.println(bookHtml);
 
             if (matcher2.find()) {
-                System.out.println("ISBN gefunden");
-                System.out.println(matcher2.group());
                 book.setIsbn(matcher2.group(1));
             }
 

@@ -1,6 +1,5 @@
 package won.bot.skeleton.impl;
 
-import org.apache.jena.vocabulary.DC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import won.bot.framework.bot.base.EventBot;
@@ -25,15 +24,11 @@ import won.bot.framework.extensions.serviceatom.ServiceAtomExtension;
 import won.bot.skeleton.action.MatcherExtensionAtomCreatedAction;
 import won.bot.skeleton.context.SkeletonBotContextWrapper;
 
-
 import won.bot.framework.extensions.matcher.MatcherBehaviour;
 import won.bot.framework.extensions.matcher.MatcherExtension;
 import won.bot.framework.extensions.matcher.MatcherExtensionAtomCreatedEvent;
 import won.protocol.message.WonMessage;
 import won.protocol.message.builder.WonMessageBuilder;
-import won.protocol.model.Coordinate;
-import won.protocol.util.DefaultAtomModelWrapper;
-import won.protocol.vocabulary.SCHEMA;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
