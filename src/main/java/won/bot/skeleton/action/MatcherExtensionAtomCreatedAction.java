@@ -63,6 +63,8 @@ public class MatcherExtensionAtomCreatedAction extends BaseEventBotAction {
                     return true;
                 }
             }
+
+
         }
 
         return false;
@@ -70,15 +72,12 @@ public class MatcherExtensionAtomCreatedAction extends BaseEventBotAction {
 
     private boolean hasBookTag(String elem) {
         if(elem.toLowerCase().contains("book")){
-            // hier crawler aufrufen mit titel
             return true;
         }
         if(elem.toLowerCase().contains("buch")){
-            // hier crawler aufrufen
             return true;
         }
         if(elem.toLowerCase().equals("bücher")){
-            // hier crawler aufrufen
             return true;
         }
 

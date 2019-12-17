@@ -98,10 +98,10 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
 
                 ConnectFromOtherAtomEvent connectFromOtherAtomEvent = (ConnectFromOtherAtomEvent) event;
                 try {
-                    String message = "hello\n" +
-                            "i am the BookPileBot and i will find books for that you send me or that somebody searches for\n" +
-                            "please send me a book title or an isbn number\n" +
-                            "thank you";
+                    String message = "Hello!\n" +
+                            "I am the BookPileBot and I will find books for that You send me or that somebody searches for.\n" +
+                            "Please send me a book title or an isbn number!\n" +
+                            "Thank You.";
 
                     final ConnectCommandEvent connectCommandEvent = new ConnectCommandEvent(connectFromOtherAtomEvent.getRecipientSocket(), connectFromOtherAtomEvent.getSenderSocket(), message);
                     ctx.getEventBus().subscribe(ConnectCommandSuccessEvent.class, new ActionOnFirstEventListener(ctx,
@@ -138,10 +138,6 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
 
                 BookPileGenerator bookPileGenerator = new BookPileGenerator(ctx);
 
-                //WonMessage message = messageFromOtherAtomEvent.getWonMessage();
-               // System.out.println("message: " + message);
-                //message.get
-
                 String message = "";
                 try {
                     WonMessage msg = ((MessageEvent) event).getWonMessage();
@@ -150,7 +146,6 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
                     logger.error(te.getMessage());
                 }
 
-                //System.out.println("message: " + message);
                 bookPileGenerator.generatePile(message);
 
                 URI senderSocket = messageFromOtherAtomEvent.getSocketURI();
