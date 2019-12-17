@@ -136,9 +136,7 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
 
                 MessageFromOtherAtomEvent messageFromOtherAtomEvent = (MessageFromOtherAtomEvent) event;
 
-                //BookPileGenerator bookPileGenerator = new BookP
-
-
+                BookPileGenerator bookPileGenerator = new BookPileGenerator(ctx);
 
                 //WonMessage message = messageFromOtherAtomEvent.getWonMessage();
                // System.out.println("message: " + message);
@@ -153,6 +151,7 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
                 }
 
                 //System.out.println("message: " + message);
+                bookPileGenerator.generatePile(message);
 
                 URI senderSocket = messageFromOtherAtomEvent.getSocketURI();
                 URI targetSocket = messageFromOtherAtomEvent.getTargetSocketURI();
