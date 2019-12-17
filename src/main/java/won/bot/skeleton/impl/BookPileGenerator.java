@@ -58,6 +58,8 @@ public class BookPileGenerator {
         for(PileBook book : getBooks(keyword)) {
             URI atomURI = wonNodeInformationService.generateAtomURI(wonNodeUri);
             BookAtomModelWrapper atomModelWrapper = new BookAtomModelWrapper(atomURI);
+            atomModelWrapper.addBookOfferType();
+
             atomModelWrapper.setTitle(book.getTitle());
             if (book.getIsbn() != null) {
                 atomModelWrapper.setIsbn(book.getIsbn());
