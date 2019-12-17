@@ -46,13 +46,6 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
 
     public BookAtomModelWrapper(String atomUri) {
         super(atomUri);
-
-        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
-        atomNode.addProperty(RDF.type, ModelFactory.createDefaultModel().createProperty("https://w3id.org/won/ext/demo#BookOffer"));
-
-        Resource seeksnode = atomNode.getModel().createResource();
-        seeksnode.addProperty(RDF.type, ModelFactory.createDefaultModel().createProperty("https://w3id.org/won/ext/demo#BookSearch"));
-        atomNode.addProperty(WONMATCH.seeks, seeksnode);
     }
 
     public BookAtomModelWrapper(Dataset atomDataset) {
@@ -61,6 +54,24 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
 
     public BookAtomModelWrapper(Model atomModel, Model sysInfoModel) {
         super(atomModel, sysInfoModel);
+    }
+
+    public void addBookOfferType(){
+        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
+        atomNode.addProperty(RDF.type, ModelFactory.createDefaultModel().createProperty("https://w3id.org/won/ext/demo#BookOffer"));
+
+        Resource seeksnode = atomNode.getModel().createResource();
+        seeksnode.addProperty(RDF.type, ModelFactory.createDefaultModel().createProperty("https://w3id.org/won/ext/demo#BookSearch"));
+        atomNode.addProperty(WONMATCH.seeks, seeksnode);
+    }
+
+    public void addBookSearchType(){
+        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
+        atomNode.addProperty(RDF.type, ModelFactory.createDefaultModel().createProperty("https://w3id.org/won/ext/demo#BookSearch"));
+
+        Resource seeksnode = atomNode.getModel().createResource();
+        seeksnode.addProperty(RDF.type, ModelFactory.createDefaultModel().createProperty("https://w3id.org/won/ext/demo#BookOffer"));
+        atomNode.addProperty(WONMATCH.seeks, seeksnode);
     }
 
     public boolean isBookOffer() {
