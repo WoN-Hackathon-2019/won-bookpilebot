@@ -10,16 +10,18 @@ The bot can be interacted with in three ways:
 
 The BookPileBot is a [Spring Boot Application](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-running-your-application.html).
 
-### The team: 
+## The team: 
 [bookpilebot](https://github.com/orgs/WoN-Hackathon-2019/teams/bookpilebot)
 
 Members:
 * https://github.com/sammybaer
 * https://github.com/legarou
 
-### Cooperations
+## Cooperations
 The [BookMatchBot](https://github.com/orgs/WoN-Hackathon-2019/teams/bookmatchbot)
 uses our generated atoms to match with user generated atoms searching for books.
+
+Further more, we used their BookAtomModelWrapper and extended it.
 
 ## Running the bot
 
@@ -27,7 +29,6 @@ uses our generated atoms to match with user generated atoms searching for books.
 
 - [Openjdk 8](https://adoptopenjdk.net/index.html) - the method described here does **not work** with the Oracle 8 JDK!
 - Maven framework set up
-- Use this repository as a template (green button in github GUI), fork it, or clone it.
 
 ### On the command line
 
@@ -40,7 +41,7 @@ java -jar target/bot.jar
 Now go to [What's new](https://hackathon.matchat.org/owner/#!/overview) to find your bot, connect and [create an atom](https://hackathon.matchat.org/owner/#!/create) or message your bot to see the bot in action.
 
 ### In Intellij Idea
-!!???????????!! 1. Create a run configuration for the class `won.bot.bookpile.SkeletonBotApp`
+1. Create a run configuration for the class `won.bot.bookpile.BookPileBot`
 2. Add the environment variables
 
   * `WON_NODE_URI` pointing to your node uri (e.g. `https://hackathonnode.matchat.org/won` without quotes)
