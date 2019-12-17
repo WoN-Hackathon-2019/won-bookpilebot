@@ -14,12 +14,18 @@ import won.protocol.vocabulary.WONCON;
 import won.protocol.vocabulary.WONMATCH;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Objects;
 
 /*
 * Usage: BookAtomModelWrapper wrapper = new BookAtomModelWrapper(atomCreatedEvent.getAtomData());
+*
+* wrapper.isBook()
+* wrapper.isBookOffer()
+* wrapper.isBookSearch()
 *
 * String name = wrapper.getSomeName();
 * Coordinate location = wrapper.getAnyLocationCoordinate();
@@ -57,9 +63,26 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
         super(atomModel, sysInfoModel);
     }
 
-    private void createSeeksNodeIfNonExist() {
-        if (!this.isSeek()) {
-            this.createSeeksNode(null);
+    public boolean isBookOffer() {
+        return this.getContentTypes()
+                .stream()
+                .map(URI::toString)
+                .anyMatch(u -> Objects.equals(u, "https://w3id.org/won/ext/demo#BookOffer"));
+    }
+
+    public boolean isBookSearch() {
+        return this.getContentTypes()
+                .stream()
+                .map(URI::toString)
+                .anyMatch(u -> Objects.equals(u, "https://w3id.org/won/ext/demo#BookSearch"));
+    }
+
+
+    public URI getUri() {
+        try {
+            return new URI(this.getAtomUri());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -73,25 +96,6 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
         Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
         atomNode.removeAll(SCHEMA.NAME);
         atomNode.addLiteral(SCHEMA.NAME, name);
-    }
-
-    public void setIsbn(String isbn) {
-        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
-        atomNode.addProperty(_SCHEMA.ISBN, isbn);
-    }
-
-    public void setUrl(String url) {
-        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
-        atomNode.addProperty(_SCHEMA.URL, url);
-    }
-
-    public void setAuthorName(String name) {
-        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
-        Resource author = atomNode.getModel().createResource();
-
-        atomNode.addProperty(SCHEMA.AUTHOR, author);
-        author.addProperty(SCHEMA.NAME, name);
-        author.addProperty(RDF.type, SCHEMA.PERSON);
     }
 
     public void setSeeksTitle(String title) {
@@ -272,10 +276,6 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
         }
     }
 
-    public URI getHeldBy() {
-        return null;
-    }
-
     public Collection<URI> getHolds() {
         LinkedList holds = new LinkedList();
         return holds;
@@ -286,7 +286,7 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
     }
 
     public Coordinate getAnyLocationCoordinate() {
-        if (this.isSeek()) {
+        if (this.isBookSearch()) {
             return this.getSeekLocationCoordinate();
         } else {
             return getLocationCoordinate();
@@ -338,7 +338,7 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
     }
 
     public String getAnyAuthorName() {
-        return (this.isSeek()) ? this.getSeeksAuthorName() : this.getAuthorName();
+        return (this.isBookSearch()) ? this.getSeeksAuthorName() : this.getAuthorName();
     }
 
     public String getSeeksAuthorName() {
@@ -368,6 +368,96 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
 
     public String getSomeIsbn(String... preferredLanguages) {
         return this.getSomeContentPropertyStringValue(_SCHEMA.ISBN, preferredLanguages);
+    }
+
+    public String getAnyLocalName() {
+        return (this.isBookSearch() ? this.getSeekLocalName() : this.getLocalName());
+    }
+
+    public String getSeekLocalName() {
+
+        for (Resource r : this.getSeeksNodes()) {
+            String localName = this.getLocalName(r);
+            if (localName != null) {
+                return localName;
+            }
+        }
+        return null;
+    }
+
+    public String getLocalName() {
+        return this.getLocalName(this.getAtomContentNode());
+    }
+
+    public String getLocalName(Resource contentNode) {
+        Model atomModel = this.getAtomModel();
+        RDFNode objectNode = RdfUtils.findOnePropertyFromResource(atomModel, contentNode, SCHEMA.OBJECT);
+        RDFNode aboutNode = objectNode != null && objectNode.isResource() ? RdfUtils.findOnePropertyFromResource(atomModel, objectNode.asResource(), SCHEMA.ABOUT) : null;
+
+        if (aboutNode != null) {
+            return aboutNode.asResource().getLocalName();
+        } else {
+            return null;
+        }
+    }
+
+    public boolean isBook() {
+        return this.isBookOffer() || this.isBookSearch();
+    }
+
+    public boolean matchesWith(BookAtomModelWrapper otherBook) {
+        if (this.isBookSearch()) {
+            return false;
+        }
+
+        if (otherBook.isBookOffer()) {
+            return false;
+        }
+
+        String myIsbn = this.getSomeIsbn();
+        String otherIsbn = otherBook.getSomeIsbn();
+
+        if (myIsbn != null && otherIsbn != null) {
+            return myIsbn.equalsIgnoreCase(otherIsbn);
+        }
+
+        String myAuthor = this.getAnyAuthorName();
+        String otherAuthor = otherBook.getAuthorName();
+
+        if (myAuthor != null && otherAuthor != null && !myAuthor.equalsIgnoreCase(otherAuthor)) {
+            return false;
+        }
+
+        String myTitle = this.getSomeTitleFromIsOrAll().toLowerCase();
+        String otherTitle = otherBook.getSomeTitleFromIsOrAll().toLowerCase();
+
+        return myTitle.contains(otherTitle) || otherTitle.contains(myTitle);
+    }
+
+
+    private void createSeeksNodeIfNonExist() {
+        if (!this.isSeek()) {
+            this.createSeeksNode(null);
+        }
+    }
+
+    public void setIsbn(String isbn) {
+        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
+        atomNode.addProperty(_SCHEMA.ISBN, isbn);
+    }
+
+    public void setUrl(String url) {
+        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
+        atomNode.addProperty(_SCHEMA.URL, url);
+    }
+
+    public void setAuthorName(String name) {
+        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
+        Resource author = atomNode.getModel().createResource();
+
+        atomNode.addProperty(SCHEMA.AUTHOR, author);
+        author.addProperty(SCHEMA.NAME, name);
+        author.addProperty(RDF.type, SCHEMA.PERSON);
     }
 
     public String getSeeksIsbn() {
