@@ -4,7 +4,7 @@ The bot reacts to user book needs, crawls search results from https://buechereie
 
 The bot can be interacted with in two ways:
 * generate an atom "Look for something" and relate it to books by adding a tag that cointains the word "book", "buch" or "bücher"
-* connect with the bots atom and write him which book you are looking for
+* connect with the bots atom and send him a message containing the book title or isbn you are looking for
 
 The BookPileBot is a [Spring Boot Application](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-running-your-application.html).
 
