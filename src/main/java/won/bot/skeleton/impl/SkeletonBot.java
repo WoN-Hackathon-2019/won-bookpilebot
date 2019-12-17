@@ -1,5 +1,6 @@
 package won.bot.skeleton.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import won.bot.framework.bot.base.EventBot;
@@ -8,6 +9,7 @@ import won.bot.framework.eventbot.action.BaseEventBotAction;
 import won.bot.framework.eventbot.behaviour.ExecuteWonMessageCommandBehaviour;
 import won.bot.framework.eventbot.bus.EventBus;
 import won.bot.framework.eventbot.event.Event;
+import won.bot.framework.eventbot.event.MessageEvent;
 import won.bot.framework.eventbot.event.impl.command.connect.ConnectCommandEvent;
 import won.bot.framework.eventbot.event.impl.command.connect.ConnectCommandResultEvent;
 import won.bot.framework.eventbot.event.impl.command.connect.ConnectCommandSuccessEvent;
@@ -29,11 +31,12 @@ import won.bot.framework.extensions.matcher.MatcherExtension;
 import won.bot.framework.extensions.matcher.MatcherExtensionAtomCreatedEvent;
 import won.protocol.message.WonMessage;
 import won.protocol.message.builder.WonMessageBuilder;
+import won.protocol.util.WonRdfUtils;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
-import java.util.Map;
-import java.util.Set;
+
+
 
 public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAtomExtension {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -129,32 +132,41 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
         // listen for the MessageFromOtherAtomEvent
         bus.subscribe(MessageFromOtherAtomEvent.class, new BaseEventBotAction(ctx) {
             protected void doRun(Event event, EventListener executingListener) {
-                //EventListenerContext ctx = getEventListenerContext();
+                EventListenerContext ctx = getEventListenerContext();
 
-                //MessageFromOtherAtomEvent messageFromOtherAtomEvent = (MessageFromOtherAtomEvent) event;
+                MessageFromOtherAtomEvent messageFromOtherAtomEvent = (MessageFromOtherAtomEvent) event;
 
-                //TODO lesen was geschrieben wurde und damit den crawler aufrufen
+                BookPileGenerator bookPileGenerator = new BookPileGenerator(ctx);
 
-                //TODO nur einer person antworten (der richtigen)
+                //WonMessage message = messageFromOtherAtomEvent.getWonMessage();
+               // System.out.println("message: " + message);
+                //message.get
 
-                Map<URI, Set<URI>> connectedSocketsMapSet = botContextWrapper.getConnectedSockets();
-
-                for(Map.Entry<URI, Set<URI>> entry : connectedSocketsMapSet.entrySet()) {
-                    URI senderSocket = entry.getKey();
-                    Set<URI> targetSocketsSet = entry.getValue();
-                    for(URI targetSocket : targetSocketsSet) {
-                        logger.info("TODO: Send MSG("+senderSocket+"->"+targetSocket+") that we did the search for them ");
-                        WonMessage wonMessage = WonMessageBuilder
-                                .connectionMessage()
-                                .sockets()
-                                .sender(senderSocket)
-                                .recipient(targetSocket)
-                                .content()
-                                .text("I have searched and found")
-                                .build();
-                        ctx.getWonMessageSender().prepareAndSendMessage(wonMessage);
-                    }
+                String message = "";
+                try {
+                    WonMessage msg = ((MessageEvent) event).getWonMessage();
+                    message = extractTextMessageFromWonMessage(msg);
+                } catch (Exception te) {
+                    logger.error(te.getMessage());
                 }
+
+                //System.out.println("message: " + message);
+                bookPileGenerator.generatePile(message);
+
+                URI senderSocket = messageFromOtherAtomEvent.getSocketURI();
+                URI targetSocket = messageFromOtherAtomEvent.getTargetSocketURI();
+
+                logger.info("TODO: Send MSG("+senderSocket+"->"+targetSocket+") that we did the search for them ");
+                WonMessage wonMessage = WonMessageBuilder
+                        .connectionMessage()
+                        .sockets()
+                        .sender(senderSocket)
+                        .recipient(targetSocket)
+                        .content()
+                        .text("I have searched for " + message + " and created Atoms.\n" + "The BookMatchBot will match issues to Your inquiry.\n"
+                                + "We hope You find what You are looking for!")
+                        .build();
+                ctx.getWonMessageSender().prepareAndSendMessage(wonMessage);
             }
         });
 
@@ -173,5 +185,12 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
                 botContextWrapper.removeConnectedSocket(senderSocketUri, targetSocketUri);
             }
         });
+    }
+
+    private String extractTextMessageFromWonMessage(WonMessage wonMessage) {
+        if (wonMessage == null)
+            return null;
+        String message = WonRdfUtils.MessageUtils.getTextMessage(wonMessage);
+        return StringUtils.trim(message);
     }
 }
