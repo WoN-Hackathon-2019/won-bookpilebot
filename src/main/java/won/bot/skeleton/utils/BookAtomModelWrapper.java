@@ -1,10 +1,7 @@
 package won.bot.skeleton.utils;
 
 import org.apache.jena.query.Dataset;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.DC;
 import org.apache.jena.vocabulary.RDF;
 import won.protocol.model.AtomGraphType;
@@ -43,6 +40,13 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
 
     public BookAtomModelWrapper(String atomUri) {
         super(atomUri);
+
+        Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
+        atomNode.addProperty(RDF.type, ModelFactory.createDefaultModel().createProperty("https://w3id.org/won/ext/demo#BookOffer"));
+
+        Resource seeksnode = atomNode.getModel().createResource();
+        seeksnode.addProperty(RDF.type, ModelFactory.createDefaultModel().createProperty("https://w3id.org/won/ext/demo#BookSearch"));
+        atomNode.addProperty(WONMATCH.seeks, seeksnode);
     }
 
     public BookAtomModelWrapper(Dataset atomDataset) {

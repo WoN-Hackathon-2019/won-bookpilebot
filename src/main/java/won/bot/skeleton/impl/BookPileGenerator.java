@@ -69,10 +69,11 @@ public class BookPileGenerator {
             // Resource seeker = atomModelWrapper.createSeeksNode(atomURI.toString());
 
             // add sockets for connections between atoms
-            atomModelWrapper.addSocket(atomURI.toString() + "#socket0", SocketType.ChatSocket.getURI().toString());
+            //atomModelWrapper.addSocket(atomURI.toString() + "#socket0", SocketType.ChatSocket.getURI().toString());
+            //atomModelWrapper.addSocket(atomURI.toString() + "#socket1", SocketType.HoldableSocket.getURI().toString());
 
             //publish command
-            CreateAtomCommandEvent createCommand = new CreateAtomCommandEvent(atomModelWrapper.getDataset(), uriListName);
+            CreateAtomCommandEvent createCommand = new CreateAtomCommandEvent(atomModelWrapper.getDataset(), uriListName, SocketType.HoldableSocket.getURI(), SocketType.ChatSocket.getURI());
 
             // this registers a listener that is activated when the message has been successful
             ctx.getEventBus().subscribe(
