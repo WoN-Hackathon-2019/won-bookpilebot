@@ -12,9 +12,11 @@ public class _SCHEMA {
 
     public static final Property AUTHOR;
     public static final Property ISBN;
+    public static final Property URL;
 
     static {
         AUTHOR = m.createProperty("http://schema.org/author");
         ISBN = m.createProperty("http://schema.org/isbn");
+        URL = m.createProperty("http://schema.org/url");
     }
 }

@@ -78,7 +78,7 @@ public class BookAtomModelWrapper extends AtomModelWrapper {
 
     public void setUrl(String url) {
         Resource atomNode = this.getAtomNode(AtomGraphType.ATOM);
-        atomNode.addProperty(SCHEMA.URL, url);
+        atomNode.addProperty(_SCHEMA.URL, url);
     }
 
     public void setAuthorName(String name) {
