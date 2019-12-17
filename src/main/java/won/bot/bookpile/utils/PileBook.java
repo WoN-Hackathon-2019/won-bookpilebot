@@ -1,4 +1,4 @@
-package won.bot.skeleton.utils;
+package won.bot.bookpile.utils;
 
 /**
  * Created by Samantha on 10.12.2019.

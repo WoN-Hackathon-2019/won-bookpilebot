@@ -1,4 +1,4 @@
-package won.bot.skeleton.utils;
+package won.bot.bookpile.utils;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

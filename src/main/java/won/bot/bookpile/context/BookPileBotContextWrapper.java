@@ -1,4 +1,4 @@
-package won.bot.skeleton.context;
+package won.bot.bookpile.context;
 
 import won.bot.framework.bot.context.BotContext;
 import won.bot.framework.extensions.serviceatom.ServiceAtomEnabledBotContextWrapper;

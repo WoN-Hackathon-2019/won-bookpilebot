@@ -1,4 +1,4 @@
-package won.bot.skeleton.impl;
+package won.bot.bookpile.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +10,9 @@ import won.bot.framework.eventbot.event.impl.command.create.CreateAtomCommandSuc
 import won.bot.framework.eventbot.filter.impl.CommandResultFilter;
 import won.bot.framework.eventbot.listener.EventListener;
 import won.bot.framework.eventbot.listener.impl.ActionOnFirstEventListener;
-import won.bot.skeleton.utils.BookAtomModelWrapper;
-import won.bot.skeleton.utils.PileBook;
-import won.bot.skeleton.utils.RestClient;
+import won.bot.bookpile.utils.BookAtomModelWrapper;
+import won.bot.bookpile.utils.PileBook;
+import won.bot.bookpile.utils.RestClient;
 import won.protocol.model.SocketType;
 import won.protocol.service.WonNodeInformationService;
 import won.protocol.util.AtomModelWrapper;

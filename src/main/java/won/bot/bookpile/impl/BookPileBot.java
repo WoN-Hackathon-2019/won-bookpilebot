@@ -1,4 +1,4 @@
-package won.bot.skeleton.impl;
+package won.bot.bookpile.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,8 +23,8 @@ import won.bot.framework.eventbot.listener.EventListener;
 import won.bot.framework.eventbot.listener.impl.ActionOnFirstEventListener;
 import won.bot.framework.extensions.serviceatom.ServiceAtomBehaviour;
 import won.bot.framework.extensions.serviceatom.ServiceAtomExtension;
-import won.bot.skeleton.action.MatcherExtensionAtomCreatedAction;
-import won.bot.skeleton.context.BookPileBotContextWrapper;
+import won.bot.bookpile.action.MatcherExtensionAtomCreatedAction;
+import won.bot.bookpile.context.BookPileBotContextWrapper;
 
 import won.bot.framework.extensions.matcher.MatcherBehaviour;
 import won.bot.framework.extensions.matcher.MatcherExtension;

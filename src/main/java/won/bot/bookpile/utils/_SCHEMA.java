@@ -1,4 +1,4 @@
-package won.bot.skeleton.utils;
+package won.bot.bookpile.utils;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
