@@ -33,7 +33,7 @@ public class BookPileGenerator {
         this.ctx = ctx;
     }
 
-    private static final String regex = "<div>\\s*?<a.*?href=\"(.*?)\".*?>(.*?<mark>(.*?)</mark>.*?)</a>.*?</div>\\s*?" +
+    private static final String regex = "<div>\\s*?<a.*?href=\"(.*?)\".*?>(.*?(<mark>.*?</mark>)?.*?)</a>.*?</div>\\s*?" +
             "<div.*?>(.*?)</div>\\s*?<div.*?>.*?</div>\\s*?" +
             "<div>.*?<span.*?>\\s*?VerfasserIn:.*?</span>(.*?)</div>.*?" +
             "<div>\\s*?<span.*?>\\s*?Jahr:.*?</span>(.*?)</div>.*?" +
