@@ -163,7 +163,7 @@ public class SkeletonBot extends EventBot implements MatcherExtension, ServiceAt
                         .sender(senderSocket)
                         .recipient(targetSocket)
                         .content()
-                        .text("I have searched for " + message + " and created Atoms.\n" + "The BookMatchBot will match issues to Your inquiry.\n"
+                        .text("I have searched for '" + message + "' and created Atoms.\n" + "The BookMatchBot will match issues to Your inquiry.\n"
                                 + "We hope You find what You are looking for!")
                         .build();
                 ctx.getWonMessageSender().prepareAndSendMessage(wonMessage);
