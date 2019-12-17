@@ -54,10 +54,11 @@ public class MatcherExtensionAtomCreatedAction extends BaseEventBotAction {
             String isbn = bookAtomModelWrapper.getSeeksIsbn();
 
             if(isbn!=null){
-                // crawler mit isbn
                 return true;
             }
-
+            if(bookAtomModelWrapper.isBookSearch()){
+                return true;
+            }
             for (String elem : tagsList) {
                 if (hasBookTag(elem)) {
                     return true;
