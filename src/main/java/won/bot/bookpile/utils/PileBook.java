@@ -1,5 +1,7 @@
 package won.bot.bookpile.utils;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  * Created by Samantha on 10.12.2019.
  */
@@ -25,7 +27,7 @@ public class PileBook {
     }
 
     public void setTitle(String title) {
-        this.title = title.trim().replaceAll("<.?mark>", "");
+        this.title = preProcess(title);
     }
 
     public String getSubtitle() {
@@ -33,7 +35,7 @@ public class PileBook {
     }
 
     public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle.trim();
+        this.subtitle = preProcess(subtitle);
     }
 
     public String getAuthor() {
@@ -41,7 +43,7 @@ public class PileBook {
     }
 
     public void setAuthor(String author) {
-        this.author = author.trim();
+        this.author = preProcess(author);
     }
 
     public String getSeries() {
@@ -49,7 +51,7 @@ public class PileBook {
     }
 
     public void setSeries(String series) {
-        this.series = (series != null ? series.trim() : series);
+        this.series = (series != null ? preProcess(series) : series);
     }
 
     public String getPublisher() {
@@ -57,7 +59,7 @@ public class PileBook {
     }
 
     public void setPublisher(String publisher) {
-        this.publisher = publisher.trim();
+        this.publisher = preProcess(publisher);
     }
 
     public String getMediaType() {
@@ -65,7 +67,7 @@ public class PileBook {
     }
 
     public void setMediaType(String mediaType) {
-        this.mediaType = mediaType.trim();
+        this.mediaType = preProcess(mediaType);
     }
 
     public String getSearch() {
@@ -73,7 +75,7 @@ public class PileBook {
     }
 
     public void setSearch(String search) {
-        this.search = search.trim();
+        this.search = preProcess(search);
     }
 
     public String getUrl() {
@@ -81,7 +83,8 @@ public class PileBook {
     }
 
     public void setUrl(String url) {
-        this.url = url.trim().replace("&amp;", "&");
+        // .replace("&amp;", "&")
+        this.url = preProcess(url);
     }
 
     public String getYear() {
@@ -89,7 +92,7 @@ public class PileBook {
     }
 
     public void setYear(String year) {
-        this.year = year.trim();
+        this.year = preProcess(year);
     }
 
     public String getIsbn() {
@@ -97,7 +100,7 @@ public class PileBook {
     }
 
     public void setIsbn(String isbn) {
-        this.isbn = isbn;
+        this.isbn = preProcess(isbn);
     }
 
     public String getDescription() {
@@ -114,6 +117,12 @@ public class PileBook {
             return ""+year;
         }
         return "";
+    }
+
+    public String preProcess(String input){
+        String withCharacters = StringEscapeUtils.unescapeHtml3(input);
+        
+        return withCharacters.trim().replaceAll("<.?mark>", "");
     }
 
     @Override
