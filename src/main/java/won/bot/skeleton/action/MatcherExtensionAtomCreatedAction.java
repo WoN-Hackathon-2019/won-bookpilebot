@@ -8,7 +8,7 @@ import won.bot.framework.eventbot.action.BaseEventBotAction;
 import won.bot.framework.eventbot.event.Event;
 import won.bot.framework.eventbot.listener.EventListener;
 import won.bot.framework.extensions.matcher.MatcherExtensionAtomCreatedEvent;
-import won.bot.skeleton.context.SkeletonBotContextWrapper;
+import won.bot.skeleton.context.BookPileBotContextWrapper;
 import won.bot.skeleton.impl.BookPileGenerator;
 import won.bot.skeleton.utils.BookAtomModelWrapper;
 
@@ -24,8 +24,8 @@ public class MatcherExtensionAtomCreatedAction extends BaseEventBotAction {
 
     @Override protected void doRun(Event event, EventListener executingListener) throws Exception {
         EventListenerContext ctx = getEventListenerContext();
-        if(!(event instanceof MatcherExtensionAtomCreatedEvent) || !(getEventListenerContext().getBotContextWrapper() instanceof SkeletonBotContextWrapper)) {
-            logger.error("MatcherExtensionAtomCreatedAction can only handle MatcherExtensionAtomCreatedEvent and only works with SkeletonBotContextWrapper");
+        if(!(event instanceof MatcherExtensionAtomCreatedEvent) || !(getEventListenerContext().getBotContextWrapper() instanceof BookPileBotContextWrapper)) {
+            logger.error("MatcherExtensionAtomCreatedAction can only handle MatcherExtensionAtomCreatedEvent and only works with BookPileBotContextWrapper");
             return;
         }
 
