@@ -1,5 +1,7 @@
 package won.bot.skeleton.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import won.bot.framework.eventbot.EventListenerContext;
 import won.bot.framework.eventbot.action.BaseEventBotAction;
 import won.bot.framework.eventbot.event.Event;
@@ -11,9 +13,11 @@ import won.bot.framework.eventbot.listener.impl.ActionOnFirstEventListener;
 import won.bot.skeleton.utils.BookAtomModelWrapper;
 import won.bot.skeleton.utils.PileBook;
 import won.bot.skeleton.utils.RestClient;
+import won.protocol.model.SocketType;
 import won.protocol.service.WonNodeInformationService;
 import won.protocol.util.AtomModelWrapper;
 
+import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -23,6 +27,8 @@ import java.util.regex.Pattern;
  * Created by Samantha on 10.12.2019.
  */
 public class BookPileGenerator {
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     private static final String GET_ENDPOINT = "https://buechereien.wien.gv.at/Mediensuche/Einfache-Suche?search=%1";
     private static final String uriListName = "atom-pile";
     private static final RestClient restClient = new RestClient();
@@ -33,7 +39,7 @@ public class BookPileGenerator {
         this.ctx = ctx;
     }
 
-    private static final String regex = "<div>\\s*?<a.*?href=\"(.*?)\".*?>(.*?<mark>(.*?)</mark>.*?)</a>.*?</div>\\s*?" +
+    private static final String regex = "<div>\\s*?<a.*?href=\"(.*?)\".*?>(.*?(<mark>.*?</mark>)?.*?)</a>.*?</div>\\s*?" +
             "<div.*?>(.*?)</div>\\s*?<div.*?>.*?</div>\\s*?" +
             "<div>.*?<span.*?>\\s*?VerfasserIn:.*?</span>(.*?)</div>.*?" +
             "<div>\\s*?<span.*?>\\s*?Jahr:.*?</span>(.*?)</div>.*?" +
@@ -56,8 +62,6 @@ public class BookPileGenerator {
             if (book.getIsbn() != null) {
                 atomModelWrapper.setIsbn(book.getIsbn());
             }
-            // TODO check empty fields
-            // TODO check set URL
             atomModelWrapper.setUrl(book.getUrl());
             atomModelWrapper.setDescription(book.getDescription());
             atomModelWrapper.setAuthorName(book.getAuthor());
@@ -65,8 +69,7 @@ public class BookPileGenerator {
             // Resource seeker = atomModelWrapper.createSeeksNode(atomURI.toString());
 
             // add sockets for connections between atoms
-            // atomModelWrapper.addSocket(atomURI.toString() + "#socket0", SocketType.ChatSocket.getURI().toString());
-            // atomModelWrapper.addSocket(atomURI.toString() + "#socket1", SocketType.HoldableSocket.getURI().toString());
+            atomModelWrapper.addSocket(atomURI.toString() + "#socket0", SocketType.ChatSocket.getURI().toString());
 
             //publish command
             CreateAtomCommandEvent createCommand = new CreateAtomCommandEvent(atomModelWrapper.getDataset(), uriListName);
@@ -81,7 +84,7 @@ public class BookPileGenerator {
                                 @Override
                                 protected void doRun(Event event, EventListener executingListener) {
                                     //your action here
-                                    System.out.println("Book created");
+                                    logger.info("Book Atom created");
                                 }
                             }));
 
