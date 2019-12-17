@@ -98,9 +98,9 @@ public class BookPileBot extends EventBot implements MatcherExtension, ServiceAt
 
                 ConnectFromOtherAtomEvent connectFromOtherAtomEvent = (ConnectFromOtherAtomEvent) event;
                 try {
-                    String message = "Hello!/n" +
-                            "I am the BookPileBot and I can find books that You search for!/n" +
-                            "I generate Book Offer Atoms containing a Link to a Website where you can borrow them!/n" +
+                    String message = "Hello!\n" +
+                            "I am the BookPileBot and I can find books that You search for!\n" +
+                            "I generate Book Offer Atoms containing a Link to a Website where you can borrow them!\n" +
                             "Please either send me a book title, an isbn number or generate a SearchAtom with your query, thank You.";
 
                     final ConnectCommandEvent connectCommandEvent = new ConnectCommandEvent(connectFromOtherAtomEvent.getRecipientSocket(), connectFromOtherAtomEvent.getSenderSocket(), message);
